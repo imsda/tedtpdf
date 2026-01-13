@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DOCX Viewer</title>
+
+  <!-- Mammoth.js DOCX → HTML -->
+  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    #content {
+      max-width: 900px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Document Viewer</h1>
+<div id="content">Loading document…</div>
+
+<script>
+  // UPDATE THIS PATH to your DOCX file
+  const docxPath = "docs/your-file.docx";
+
+  fetch(docxPath)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Failed to load DOCX file");
+      }
+      return response.arrayBuffer();
+    })
+    .then(arrayBuffer => mammoth.convertToHtml({ arrayBuffer }))
+    .then(result => {
+      document.getElementById("content").innerHTML = result.value;
+    })
+    .catch(error => {
+      document.getElementById("content").innerText =
+        "Error loading document.";
+      console.error(error);
+    });
+</script>
+
+</body>
+</html>
